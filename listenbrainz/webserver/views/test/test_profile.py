@@ -13,7 +13,7 @@ from listenbrainz.listen import Listen
 from listenbrainz.tests.integration import IntegrationTestCase
 from unittest.mock import patch
 from listenbrainz.db.model.feedback import Feedback
-from listenbrainz.db import external_service_oauth as db_oauth
+from listenbrainz.db import external_service_oauth as db_oauth, listens_importer
 
 
 class ProfileViewsTestCase(IntegrationTestCase):
@@ -43,7 +43,7 @@ class ProfileViewsTestCase(IntegrationTestCase):
     def test_reset_import_timestamp(self):
         self.temporary_login(self.user['login_id'])
         val = int(time.time())
-        db_user.update_latest_import(self.user['musicbrainz_id'], val)
+        listens_importer.update_latest_listened_at(self.user['id'], ExternalServiceType.LASTFM, val)
 
         response = self.client.post(
             url_for('profile.reset_latest_import_timestamp'),
@@ -54,25 +54,8 @@ class ProfileViewsTestCase(IntegrationTestCase):
         )
         self.assertStatus(response, 302) # should have redirected to the info page
         self.assertRedirects(response, url_for('profile.info'))
-        ts = db_user.get(self.user['id'])['latest_import'].strftime('%s')
-        self.assertEqual(int(ts), 0)
-
-    def test_reset_import_timestamp_post(self):
-        self.temporary_login(self.user['login_id'])
-        val = int(time.time())
-        db_user.update_latest_import(self.user['musicbrainz_id'], val)
-
-        response = self.client.post(
-            url_for('profile.reset_latest_import_timestamp'),
-            data={
-                'reset': 'yes',
-                'token': self.user['auth_token']
-            }
-        )
-        self.assertStatus(response, 302)  # should have redirected to the import page
-        self.assertRedirects(response, url_for('profile.info'))
-        ts = db_user.get(self.user['id'])['latest_import'].strftime('%s')
-        self.assertEqual(int(ts), 0)
+        ts = listens_importer.get_latest_listened_at(self.user['id'], ExternalServiceType.LASTFM)
+        self.assertEqual(int(ts.strftime('%s')), 0)
 
     def test_user_info_not_logged_in(self):
         """Tests user info view when not logged in"""
