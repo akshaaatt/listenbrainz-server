@@ -5,3 +5,4 @@ class ExternalServiceType(Enum):
     SPOTIFY = 'spotify'
     YOUTUBE = 'youtube'
     LASTFM = 'lastfm'
+    LIBREFM = 'librefm'
