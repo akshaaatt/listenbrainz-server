@@ -55,7 +55,7 @@ def append(df, dest_path):
 
 
 def init_rabbitmq(username, password, host, port, vhost, log=logger.error,
-                  heartbeat=None, connection_name="listenbrainz-spark-request-consumer"):
+                  connection_name="listenbrainz-spark-request-consumer"):
     while True:
         try:
             credentials = pika.PlainCredentials(username, password)
@@ -64,7 +64,6 @@ def init_rabbitmq(username, password, host, port, vhost, log=logger.error,
                 port=port,
                 virtual_host=vhost,
                 credentials=credentials,
-                heartbeat=heartbeat,
                 client_properties={"connection_name": connection_name}
             )
             return pika.BlockingConnection(connection_parameters)
