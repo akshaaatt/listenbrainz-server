@@ -138,7 +138,7 @@ class RequestConsumer:
             try:
                 self.connect_to_rabbitmq()
                 self.init_request_channel()
-                self.init_request_channel()
+                self.init_result_channel()
                 logger.info('Request consumer started!')
 
                 try:
