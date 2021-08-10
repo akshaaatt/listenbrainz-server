@@ -89,27 +89,13 @@ export default class UserEntityChart extends React.Component<
     window.removeEventListener("resize", this.handleResize);
   }
 
-  changePage = (
-    newPage: number,
-    event?: React.MouseEvent<HTMLElement>
-  ): void => {
-    if (event) {
-      event.preventDefault();
-    }
-
+  changePage = (newPage: number): void => {
     const { entity, range } = this.state;
     this.setURLParams(newPage, range, entity);
     this.syncStateWithURL();
   };
 
-  changeRange = (
-    newRange: UserStatsAPIRange,
-    event?: React.MouseEvent<HTMLElement>
-  ): void => {
-    if (event) {
-      event.preventDefault();
-    }
-
+  changeRange = (newRange: UserStatsAPIRange): void => {
     const { entity } = this.state;
     this.setURLParams(1, newRange, entity);
     this.syncStateWithURL();
@@ -466,7 +452,10 @@ export default class UserEntityChart extends React.Component<
                       <a
                         href={this.buildURLParams(1, "week", entity)}
                         role="button"
-                        onClick={(event) => this.changeRange("week", event)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.changeRange("week");
+                        }}
                       >
                         Week
                       </a>
@@ -475,7 +464,10 @@ export default class UserEntityChart extends React.Component<
                       <a
                         href={this.buildURLParams(1, "month", entity)}
                         role="button"
-                        onClick={(event) => this.changeRange("month", event)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.changeRange("month");
+                        }}
                       >
                         Month
                       </a>
@@ -484,7 +476,10 @@ export default class UserEntityChart extends React.Component<
                       <a
                         href={this.buildURLParams(1, "year", entity)}
                         role="button"
-                        onClick={(event) => this.changeRange("year", event)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.changeRange("year");
+                        }}
                       >
                         Year
                       </a>
@@ -493,7 +488,10 @@ export default class UserEntityChart extends React.Component<
                       <a
                         href={this.buildURLParams(1, "all_time", entity)}
                         role="button"
-                        onClick={(event) => this.changeRange("all_time", event)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.changeRange("all_time");
+                        }}
                       >
                         All Time
                       </a>
@@ -569,7 +567,10 @@ export default class UserEntityChart extends React.Component<
                       <a
                         href={this.buildURLParams(prevPage, range, entity)}
                         role="button"
-                        onClick={(event) => this.changePage(prevPage, event)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.changePage(prevPage);
+                        }}
                       >
                         &larr; Previous
                       </a>
@@ -582,7 +583,10 @@ export default class UserEntityChart extends React.Component<
                       <a
                         href={this.buildURLParams(nextPage, range, entity)}
                         role="button"
-                        onClick={(event) => this.changePage(nextPage, event)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          this.changePage(nextPage);
+                        }}
                       >
                         Next &rarr;
                       </a>
